@@ -232,14 +232,28 @@ def add_category():
         return render_template('new-category.html')
 
 
-@app.route("/catalog/item/new/")
+@app.route("/catalog/item/new/", methods=['GET', 'POST'])
 def add_item():
+    """Create new item.
+
+    Note: This route will list all the categories that the
+    logged-in user has created. There is another module which
+    creates items based on the endpoint mentioned.
+    """
+
     if 'username' not in login_session:
         flash("You were not authorised to access that page.\
               Please log in to continue.")
         return redirect(url_for('login'))
     elif request.method == 'POST':
-
+        new_item = Item(
+            name=request.form['name'],
+            category_id=request.form['category'],
+            description=request.form['description'],
+            user_id=login_session['user_id']
+        )
+        session.add(new_item)
+        session.commit()
         flash('New item successfully created!')
         return redirect(url_for('home'))
     else:
