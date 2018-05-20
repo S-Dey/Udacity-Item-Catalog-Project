@@ -375,6 +375,32 @@ def delete_item(item_id):
         return render_template('delete.html', item=item) 
 
 
+# --------------------------------------
+# JSON APIs to show Catalog information
+# --------------------------------------
+@app.route('/api/v1/catalog.json')
+def showCatalogJSON():
+    """Returns JSON of all items in catalog"""
+    items = session.query(CatalogItem).order_by(CatalogItem.id.desc())
+    return jsonify(CatalogItems=[i.serialize for i in items])
+
+
+@app.route(
+    '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/JSON')
+def catalogItemJSON(category_id, catalog_item_id):
+    """Returns JSON of selected item in catalog"""
+    Catalog_Item = session.query(
+        CatalogItem).filter_by(id=catalog_item_id).one()
+    return jsonify(Catalog_Item=Catalog_Item.serialize)
+
+
+@app.route('/api/v1/categories/JSON')
+def categoriesJSON():
+    """Returns JSON of all categories in catalog"""
+    categories = session.query(Category).all()
+    return jsonify(Categories=[r.serialize for r in categories])
+
+
 if __name__ == "__main__":
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     app.run(host="0.0.0.0", port=5000, debug=True)
