@@ -30,7 +30,7 @@
 <body>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-            <div class="alert alert-{{flash_type}} alert-dismissible fade show mb-0 text-center" role="alert">
+        <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
         {% for message in messages %}
             {{ message }}
         {% endfor %}  
