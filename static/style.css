@@ -1,7 +1,7 @@
 .navbar {
-    -webkit-box-shadow: 0 8px 6px -6px #999;
-    -moz-box-shadow: 0 8px 6px -6px #999;
-    box-shadow: 0 8px 150px -6px #999;
+    -webkit-box-shadow: 0 0 150px 0 #999;
+    -moz-box-shadow: 0 0 150px 0 #999;
+    box-shadow: 0 0 150px 0 #999;
 }
 
 body {
@@ -13,7 +13,7 @@ body {
 }
 
 .sections {
-    margin-top: 6%;
+    margin-top: 4%;
 }
 
 .login-box {
