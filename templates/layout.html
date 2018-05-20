@@ -31,12 +31,16 @@
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-            {% if 'username' in session %}
-                <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
-            {% elif (message == 'You have been successfully logged out!') %}
-                <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
-            {% else %}
+            {% if message == 'You were not authorised to access that page.' %}
                 <div class="alert alert-danger alert-dismissible fade show mb-0 text-center" role="alert">
+            {% elif message == 'The requested item does not exist.' %}
+                <div class="alert alert-danger alert-dismissible fade show mb-0 text-center" role="alert">
+            {% elif 'username' in session %}
+                <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
+            {% endif %}
+
+            {% if message == 'You have been successfully logged out!' %}
+                    <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
             {% endif %}
             
             {{ message }}

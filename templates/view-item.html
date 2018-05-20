@@ -18,8 +18,8 @@
             {% if session['user_id'] == owner.id %}
             <div class="row" style="margin-top: 10px;">
                 <form>
-                    <button type="button" class="btn btn-primary"><i class="far fa-edit text-and-icon"></i>Edit</button>
-                    <button type="button" class="btn btn-danger"><i class="far fa-trash-alt text-and-icon"></i>Delete</button>
+                    <a href="{{ url_for('edit_item', item_id=item.id) }}"><button type="button" class="btn btn-primary"><i class="far fa-edit text-and-icon"></i>Edit</button></a>
+                    <a href="{{ url_for('home') }}"><button type="button" class="btn btn-danger"><i class="far fa-trash-alt text-and-icon"></i>Delete</button></a>
                 </form>
             </div>
             {% endif %}
