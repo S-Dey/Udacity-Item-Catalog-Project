@@ -5,27 +5,28 @@
     <div class="container">
         <div class="row" style="margin-top: 35px;">
             <div class="col-md-7">
-               <h1>Update Item</h1>
+               <h1>Create new item</h1>
 
-               <form>
+               <form method="POST">
                     <div class="form-group">
                       <label for="exampleFormControlInput1">Title</label>
-                      <input type="text" class="form-control">
+                      <input name="name" type="text" class="form-control" required>
                     </div>
                     <div class="form-group">
                       <label for="exampleFormControlSelect1">Category</label>
-                      <select class="form-control" id="exampleFormControlSelect1">
-                        <option data-tokens="mustard">Laptops</option>
-                        <option data-tokens="olive">MacBook</option>
+                      <select name="category" class="form-control" id="exampleFormControlSelect1" required>
+                        {% for category in categories %}
+                          <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
                       </select>
                     </div>                          
                     <div class="form-group">
                       <label for="exampleFormControlTextarea1">Description</label>
-                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                      <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="5" required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Update</button>
-                    <button type="button" class="btn btn-danger">Cancel</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save text-and-icon"></i>Update</button>
+                    <a href="{{ url_for('home') }}"><button type="button" class="btn btn-danger"><i class="fas fa-times text-and-icon"></i>Cancel</button></a>
                   </form>
 
             </div>

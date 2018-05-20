@@ -5,21 +5,25 @@
     <div class="container">
         <div class="col-md-12">
             <div class="row" style="margin-top: 35px;">
-                <h1>Snowboarding</h1>
+                <h1>{{ item.name }}</h1>
             </div>
             <div class="row">
-                    <p>Snowboarding is a fun game.
-                            It is awesome bro!Why do we put a # in the href attribute of the link?
-
-                            Since we do not have any page to link it to, and we do not want to get a "404" message, we put # as the link. In real life it should of course been a real URL to the "Search" page.
-                        </p>
+                    <h6><img src="{{ owner.picture }}" class="rounded-circle img-fluid" style="height: 15px; width:15px; margin-right: 5px;"
+                        alt="Profile Picture"><i>{{ owner.name }} &lt;{{ owner.email }}&gt;</i></h6>
+                </div>
+            <div class="row" style="margin-top: 2%">
+                    <p>{{ item.description }}</p>
             </div>
+            {% if 'username' in session %}
+            {% if session['user_id'] == owner.id %}
             <div class="row" style="margin-top: 10px;">
                 <form>
                     <button type="button" class="btn btn-primary"><i class="far fa-edit text-and-icon"></i>Edit</button>
                     <button type="button" class="btn btn-danger"><i class="far fa-trash-alt text-and-icon"></i>Delete</button>
                 </form>
             </div>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}

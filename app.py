@@ -188,10 +188,10 @@ def logout():
 
 # Create new user
 def create_user(login_session):
-    newUser = User(name=login_session['username'],
-                   email=login_session['email'],
-                   picture=login_session['picture'])
-    session.add(newUser)
+    new_user = User(name=login_session['username'],
+                    email=login_session['email'],
+                    picture=login_session['picture'])
+    session.add(new_user)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
@@ -263,6 +263,52 @@ def add_item():
             filter_by(user_id=login_session['user_id']).all()
         return render_template(
             'new-item.html',
+            items=items,
+            categories=categories
+        )
+
+
+@app.route('/catalog/item/<int:item_id>/')
+def view_item(item_id):
+    item = session.query(Item).filter_by(id=item_id).first()
+    owner = session.query(User).filter_by(id=item.user_id).first()
+    if item is not None:
+        return render_template("view-item.html", item=item, owner=owner)
+    else:
+        flash('The requested item does not exist.')
+        return redirect(url_for('home'))
+
+
+@app.route("/catalog/item/<int:item_id>/edit/", methods=['GET', 'POST'])
+def edit_item(item_id):
+    """Edit existing item."""
+
+    if 'username' not in login_session:
+        flash("You were not authorised to access that page.\
+              Please log in to continue.")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        items = session.query(Item).filter_by(id=item_id).first()
+
+        if items.user_id != login_session['user_id']:
+            flash("You were not authorised to access that page.")
+            return redirect(url_for('home'))
+        else:
+            if request.form['name']:
+                items.name = request.form['name']
+            if request.form['description']:
+                items.description = request.form['description']
+            if request.form['category']:
+                items.category = request.form['description']
+            flash('Item successfully updated!')
+            return redirect(url_for('home'))
+    else:
+        items = session.query(Item).\
+                filter_by(user_id=login_session['user_id']).all()
+        categories = session.query(Category).\
+            filter_by(user_id=login_session['user_id']).all()
+        return render_template(
+            'update-item.html',
             items=items,
             categories=categories
         )

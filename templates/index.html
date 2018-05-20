@@ -34,7 +34,7 @@
               <div class="col-md-8" style="background-color:white; padding-top: 8px;">
                 <h2>Latest Items</h2><hr>
                 {% for item in items %}
-                  <a href="#"><p>{{ item.name }}</p></a>
+                  <a href="{{ url_for('view_item', item_id=item.id) }}"><p>{{ item.name }}</p></a>
                 {% endfor %}
               </div>
             </div>
