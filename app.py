@@ -379,26 +379,28 @@ def delete_item(item_id):
 # JSON APIs to show Catalog information
 # --------------------------------------
 @app.route('/api/v1/catalog.json')
-def showCatalogJSON():
-    """Returns JSON of all items in catalog"""
-    items = session.query(CatalogItem).order_by(CatalogItem.id.desc())
-    return jsonify(CatalogItems=[i.serialize for i in items])
+def show_catalog_json():
+    """Returns JSON of all the items in the catalog."""
+
+    items = session.query(Item).order_by(Item.id.desc())
+    return jsonify(catalog=[i.serialize for i in items])
 
 
 @app.route(
     '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/JSON')
-def catalogItemJSON(category_id, catalog_item_id):
-    """Returns JSON of selected item in catalog"""
-    Catalog_Item = session.query(
-        CatalogItem).filter_by(id=catalog_item_id).one()
-    return jsonify(Catalog_Item=Catalog_Item.serialize)
+def catalog_item_json(category_id, catalog_item_id):
+    """Returns JSON of the selected item in the catalog."""
+
+    item = session.query(Item).filter_by(id=catalog_item_id).one()
+    return jsonify(item=item.serialize)
 
 
 @app.route('/api/v1/categories/JSON')
-def categoriesJSON():
-    """Returns JSON of all categories in catalog"""
+def categories_json():
+    """Returns JSON of all the categories in the catalog."""
+
     categories = session.query(Category).all()
-    return jsonify(Categories=[r.serialize for r in categories])
+    return jsonify(categories=[i.serialize for i in categories])
 
 
 if __name__ == "__main__":
