@@ -4,10 +4,16 @@
 {% block content %}
     <div class="container sections">
         <h1>{{ category.name }} ({{ total }}{% if total == 1 %} item{% else %} items{% endif %})</h1>
-        <div class="col-md-8" style="background-color:white; padding-top: 8px;">
-          {% for item in items %}
-            <a href="{{ url_for('view_item', item_id=item.id) }}"><p>{{ item.name }}</p></a>
-          {% endfor %}
+        <div class="col-md-8">
+          <table class="table table-hover">
+            <tbody>
+            {% for item in items %}
+              <tr>
+                <td><a href="{{ url_for('view_item', item_id=item.id) }}"><p>{{ item.name }}</p></a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
         </div>
     </div>
 {% endblock %}
