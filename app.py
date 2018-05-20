@@ -18,7 +18,7 @@ import requests
 
 app = Flask(__name__)
 
-# Load the Google Sign-in API Client ID. 
+# Load the Google Sign-in API Client ID.
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
@@ -105,8 +105,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_google_id = login_session.get('google_id')
     if stored_access_token is not None and google_id == stored_google_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -281,7 +281,7 @@ def exists_item(item_id):
         item_id (int) : The item ID to find in the database.
 
     Returns:
-        A boolean vale indicating whether the item exists or not.    
+        A boolean vale indicating whether the item exists or not.
     """
 
     item = session.query(Item).filter_by(id=item_id).first()
@@ -372,7 +372,7 @@ def delete_item(item_id):
         flash("Item successfully deleted!")
         return redirect(url_for('home'))
     else:
-        return render_template('delete.html', item=item) 
+        return render_template('delete.html', item=item)
 
 
 # --------------------------------------
