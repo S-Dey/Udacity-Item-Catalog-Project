@@ -387,12 +387,15 @@ def show_catalog_json():
 
 
 @app.route(
-    '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/JSON')
-def catalog_item_json(category_id, catalog_item_id):
-    """Returns JSON of the selected item in the catalog."""
+    '/api/v1/categories/<int:category_id>/item/<int:item_id>/JSON')
+def catalog_item_json(category_id, item_id):
+    """Returns JSON of certain item in the catalog."""
 
-    item = session.query(Item).filter_by(id=catalog_item_id).one()
-    return jsonify(item=item.serialize)
+    if exists_item(item_id):
+        item = session.query(Item).filter_by(id=item_id).one()
+        return jsonify(item=item.serialize)
+    else:
+        return jsonify(error='Item does not exist.')
 
 
 @app.route('/api/v1/categories/JSON')
