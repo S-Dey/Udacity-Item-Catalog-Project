@@ -14,8 +14,8 @@
           href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
           crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous">
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
@@ -30,7 +30,7 @@
 <body>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-        <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
+            <div class="alert alert-{{flash_type}} alert-dismissible fade show mb-0 text-center" role="alert">
         {% for message in messages %}
             {{ message }}
         {% endfor %}  
@@ -53,17 +53,19 @@
                   <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('home') }}">Catalog <span class="sr-only">(catalog)</span></a>
+                  <a class="nav-link" href="{{ url_for('all_items') }}">Catalog <span class="sr-only">(catalog)</span></a>
                 </li>
                 
                 {% if 'username' in session %}
                 <li class="nav-item dropdown ml-auto">
                     <a class="nav-link dropdown-toggle navbar-brand" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="https://lh6.googleusercontent.com/-G3j31Xj0_xQ/AAAAAAAAAAI/AAAAAAAAfO0/Fy66zVU7lWA/photo.jpg"
+                        <img src="{{ session['picture'] }}"
                         class="rounded-circle" alt="Profile Picture" style="height: 30px; width: 30px;">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                      <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt text-and-icon"></i>Log out</a>
+                        <p class="dropdown-item">Logged in as <strong>{{ session['username'] }}</strong></p>
+                        <hr>
+                        <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt text-and-icon"></i>Log out</a>
                     </div>
                   </li>
                   </ul>
