@@ -33,7 +33,7 @@
         {% for message in messages %}
             {% if 'username' in session %}
                 <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
-            {% elif message == 'You have been successfully logged out!' %}
+            {% elif (message == 'You have been successfully logged out!') %}
                 <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
             {% else %}
                 <div class="alert alert-danger alert-dismissible fade show mb-0 text-center" role="alert">
@@ -61,7 +61,7 @@
                   <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('all_items') }}">Catalog <span class="sr-only">(catalog)</span></a>
+                  <a class="nav-link" href="{{ url_for('add_item') }}">Catalog <span class="sr-only">(catalog)</span></a>
                 </li>
                 
                 {% if 'username' in session %}

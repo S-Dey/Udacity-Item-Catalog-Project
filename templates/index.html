@@ -14,7 +14,7 @@
     <div class="row">
       <div class="col-md-12">
         <a href="{{ url_for('add_category') }}"><button class="btn btn-primary"><i class="fas fa-plus text-and-icon"></i>Add Category</button></a>
-        <a href="{{ url_for('all_items') }}"><button class="btn btn-success" style="margin-left: 10px;"><i class="fas fa-plus text-and-icon"></i>Add Item</button></a>
+        <a href="{{ url_for('add_item') }}"><button class="btn btn-success" style="margin-left: 10px;"><i class="fas fa-plus text-and-icon"></i>Add Item</button></a>
       </div>
     </div>
     {% endif %}
@@ -24,23 +24,18 @@
             <div class="row">
               <div class="col-md-3" style="background-color:white; padding-top: 8px;">
                 <h2>Category</h2><hr>
-                <p><a href="#">Chips</a></p>
-                <a href="#"><p>Computer Parts</p></a>
+                {% for category in categories %}
+                  <a href="#"><p>{{ category.name }}</p></a>
+                {% endfor %}
               </div>
               
               <div class="offset-md-1"></div>
 
               <div class="col-md-8" style="background-color:white; padding-top: 8px;">
                 <h2>Latest Items</h2><hr>
-                <a href="#"><p>Apple iPhone</p></a>
-                <a href="#"><p>Dell Inspiron 5559</p></a>
-                <a href="#"><p>iPhone 2</p></a>
-                <a href="#"><p>MacBook Air</p></a>
-                <a href="#"><p>Python Cookbook</p></a>
-                <a href="#"><p>Adorian's macBook X Pro</p></a>
-                <a href="#"><p>Adorian's macBook X Pro</p></a>
-                <a href="#"><p>Adorian's macBook X Pro</p></a>
-                <a href="#"><p>Adorian's macBook X Pro</p></a>
+                {% for item in items %}
+                  <a href="#"><p>{{ item.name }}</p></a>
+                {% endfor %}
               </div>
             </div>
           </div>

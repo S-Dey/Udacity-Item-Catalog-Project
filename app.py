@@ -18,14 +18,18 @@ import requests
 
 app = Flask(__name__)
 
+# Load the Google Sign-in API Client ID. 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
-# Connect to Database and create database session
+# Connect to database and create a database session.
 engine = create_engine('sqlite:///itemcatalog.db',
                        connect_args={'check_same_thread': False})
 
+# Bind the above engine to a session.
 Session = sessionmaker(bind=engine)
+
+# Create a Session object.
 session = Session()
 
 
@@ -34,7 +38,10 @@ session = Session()
 @app.route('/catalog/')
 @app.route('/catalog/items/')
 def home():
-    return render_template('index.html')
+    categories = session.query(Category).all()
+    items = session.query(Item).all()
+    return render_template(
+        'index.html', categories=categories, items=items)
 
 
 # Create anti-forgery state token
@@ -125,9 +132,9 @@ def gconnect():
     login_session['user_id'] = user_id
 
     output = ''
-    output += '<h1>Welcome, '
+    output += '<h2>Welcome, '
     output += login_session['username']
-    output += '!</h1>'
+    output += '!</h2>'
     output += '<img src="'
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px; '
@@ -203,19 +210,48 @@ def get_user_id(email):
         return None
 
 
-@app.route("/add_category")
+@app.route("/catalog/category/new/", methods=['GET', 'POST'])
 def add_category():
-    pass
+    if 'username' not in login_session:
+        flash("You were not authorised to access that page.\
+              Please log in to continue.")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        if request.form['new-category-name'] == '':
+            flash('The category cannot be empty.')
+            return redirect(url_for('home'))
+
+        new_category = Category(
+            name=request.form['new-category-name'],
+            user_id=login_session['user_id'])
+        session.add(new_category)
+        session.commit()
+        flash('New category %s successfully created!' % new_category.name)
+        return redirect(url_for('home'))
+    else:
+        return render_template('new-category.html')
 
 
-@app.route("/add_item/<int:category_id>/")
-def add_item(category_id):
-    pass
+@app.route("/catalog/item/new/")
+def add_item():
+    if 'username' not in login_session:
+        flash("You were not authorised to access that page.\
+              Please log in to continue.")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
 
-
-@app.route("/items")
-def all_items():
-    pass
+        flash('New item successfully created!')
+        return redirect(url_for('home'))
+    else:
+        items = session.query(Item).\
+                filter_by(user_id=login_session['user_id']).all()
+        categories = session.query(Category).\
+            filter_by(user_id=login_session['user_id']).all()
+        return render_template(
+            'new-item.html',
+            items=items,
+            categories=categories
+        )
 
 
 if __name__ == "__main__":

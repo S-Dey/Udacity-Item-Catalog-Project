@@ -25,7 +25,7 @@ class Category(Base):
     __tablename__ = "category"
 
     id = Column(Integer, primary_key=True)
-    category = Column(String(50), nullable=False)
+    name = Column(String(50), nullable=False)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
@@ -35,7 +35,7 @@ class Category(Base):
 
         return {
             'id': self.id,
-            'category': self.category
+            'name': self.name
         }
 
 

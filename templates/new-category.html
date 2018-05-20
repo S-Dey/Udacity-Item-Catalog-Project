@@ -7,14 +7,16 @@
             <div class="col-md-7">
                <h1>Create New Category</h1>
 
-               <form>
+               <form name="new-category" method="POST">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input name="new-category-name" type="text" class="form-control" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save text-and-icon"></i></i>Submit</button>
-                    <button type="button" class="btn btn-danger"><i class="fas fa-times text-and-icon"></i>Cancel</button>
-                  </form>
+                    <a href="{{ url_for('home') }}">
+                        <button type="button" class="btn btn-danger"><i class="fas fa-times text-and-icon"></i>Cancel</button>
+                    </a>
+                </form>
 
             </div>
         </div>
