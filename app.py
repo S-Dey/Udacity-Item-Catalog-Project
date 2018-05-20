@@ -274,6 +274,30 @@ def add_item():
         )
 
 
+@app.route("/catalog/category/<int:category_id>/item/new/",
+           methods=['GET', 'POST'])
+def add_item_by_category(category_id):
+    """Create new item by category ID."""
+
+    if 'username' not in login_session:
+        flash("You were not authorised to access that page.")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        new_item = Item(
+            name=request.form['name'],
+            category_id=category_id,
+            description=request.form['description'],
+            user_id=login_session['user_id'])
+        session.add(new_item)
+        session.commit()
+        flash('New item successfully created!')
+        return redirect(url_for('show_items_in_category',
+                                category_id=category_id))
+    else:
+        category = session.query(Category).filter_by(id=category_id).first()
+        return render_template('new-item-2.html', category=category)
+
+
 def exists_item(item_id):
     """Check if the item exists in the database.
 
@@ -411,6 +435,65 @@ def show_items_in_category(category_id):
         items=items,
         total=total
     )
+
+
+@app.route('/catalog/category/<int:category_id>/edit/',
+           methods=['GET', 'POST'])
+def edit_category(category_id):
+    category = session.query(Category).filter_by(id=category_id).first()
+
+    if 'username' not in login_session:
+        flash("Please log in to continue.")
+        return redirect(url_for('login'))
+
+    if not exists_category(category_id):
+        flash("We are unable to process your request right now.")
+        return redirect(url_for('home'))
+
+    # If the logged in user does not have authorisation to
+    # edit the category, redirect to homepage.
+    if login_session['user_id'] != category.user_id:
+        flash("We are unable to process your request right now.")
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        if request.form['name']:
+            category.name = request.form['name']
+            session.add(category)
+            session.commit()
+            flash('Category successfully updated!')
+            return redirect(url_for('show_items_in_category',
+                                    category_id=category.id))
+    else:
+        return render_template('edit_category.html', category=category)
+
+
+@app.route('/catalog/category/<int:category_id>/delete/',
+           methods=['GET', 'POST'])
+def delete_category(category_id):
+    category = session.query(Category).filter_by(id=category_id).first()
+
+    if 'username' not in login_session:
+        flash("Please log in to continue.")
+        return redirect(url_for('login'))
+
+    if not exists_category(category_id):
+        flash("We are unable to process your request right now.")
+        return redirect(url_for('home'))
+
+    # If the logged in user does not have authorisation to
+    # edit the category, redirect to homepage.
+    if login_session['user_id'] != category.user_id:
+        flash("We are unable to process your request right now.")
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        session.delete(category)
+        session.commit()
+        flash("Category successfully deleted!")
+        return redirect(url_for('home'))
+    else:
+        return render_template("delete_category.html", category=category)
 
 
 # --------------------------------------

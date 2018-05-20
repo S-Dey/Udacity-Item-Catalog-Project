@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Add Item{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-top: 35px;">
+            <div class="col-md-7">
+               <h1>Create new item for the category {{ category.name }}</h1>
+
+               <form method="POST">
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Title</label>
+                      <input name="name" type="text" class="form-control" required>
+                    </div>              
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Description</label>
+                      <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="5" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save text-and-icon"></i>Submit</button>
+                    <a href="{{ url_for('show_items_in_category', category_id=category.id) }}"><button type="button" class="btn btn-danger"><i class="fas fa-times text-and-icon"></i>Cancel</button></a>
+                  </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

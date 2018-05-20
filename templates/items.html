@@ -4,7 +4,20 @@
 {% block content %}
     <div class="container sections">
         <h1>{{ category.name }} ({{ total }}{% if total == 1 %} item{% else %} items{% endif %})</h1>
-        <div class="col-md-8">
+        {% if session['user_id'] == category.user_id %}
+            <div class="row">
+              <div class="col-md-12">
+                <a href="{{ url_for('edit_category', category_id=category.id) }}"><button class="btn btn-primary"><i class="fas fa-edit text-and-icon"></i>Edit</button></a>
+                <a href="{{ url_for('add_item_by_category', category_id=category.id) }}"><button class="btn btn-success"><i class="fas fa-plus text-and-icon"></i>Add item </button></a>
+                <a href="{{ url_for('delete_category', category_id=category.id) }}"><button class="btn btn-danger"><i class="far fa-trash-alt text-and-icon"></i>Delete</button></a>
+              </div>
+            </div>
+        {% endif %}
+        
+        <div class="col-md-8" style="margin-top: 10px">
+          {% if total == 0 %}
+          <p>No items are present in this category.</p>
+          {% else %}
           <table class="table table-hover">
             <tbody>
             {% for item in items %}
@@ -14,6 +27,7 @@
             {% endfor %}
             </tbody>
           </table>
+          {% endif %}
         </div>
     </div>
 {% endblock %}
