@@ -16,7 +16,7 @@
                       <label for="exampleFormControlSelect1">Category</label>
                       <select name="category" class="form-control" id="exampleFormControlSelect1" required>
                         {% for category in categories %}
-                          <option value="{{ category.id }}">{{ category.name }}</option>
+                          <option value="{{ category.id }}" {% if item.category_id == category.id %} selected {% endif %}>{{ category.name }}</option>
                         {% endfor %}
                       </select>
                     </div>                          

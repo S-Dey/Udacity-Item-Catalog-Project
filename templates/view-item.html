@@ -8,8 +8,7 @@
                 <h1>{{ item.name }}</h1>
             </div>
             <div class="row">
-                    <h6><img src="{{ owner.picture }}" class="rounded-circle img-fluid" style="height: 15px; width:15px; margin-right: 5px;"
-                        alt="Profile Picture"><i>{{ owner.name }} &lt;{{ owner.email }}&gt;</i></h6>
+                    <h6><i class="fas fa-user"></i> {{ owner.name }}<i class="fas fa-tags" style="margin-left:15px"></i>{{ category.name }}</i></h6>
                 </div>
             <div class="row" style="margin-top: 2%">
                     <p>{{ item.description }}</p>

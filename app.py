@@ -218,8 +218,14 @@ def add_category():
         return redirect(url_for('login'))
     elif request.method == 'POST':
         if request.form['new-category-name'] == '':
-            flash('The category cannot be empty.')
+            flash('The field cannot be empty.')
             return redirect(url_for('home'))
+
+        category = session.query(Category).\
+            filter_by(name=request.form['new-category-name']).first()
+        if category is not None:
+            flash('The entered category already exists.')
+            return redirect(url_for('add_category'))
 
         new_category = Category(
             name=request.form['new-category-name'],
@@ -287,12 +293,21 @@ def exists_item(item_id):
 
 @app.route('/catalog/item/<int:item_id>/')
 def view_item(item_id):
+    """View an item by its ID."""
+
     if exists_item(item_id):
         item = session.query(Item).filter_by(id=item_id).first()
+        category = session.query(Category)\
+            .filter_by(id=item.category_id).first()
         owner = session.query(User).filter_by(id=item.user_id).first()
-        return render_template("view-item.html", item=item, owner=owner)
+        return render_template(
+            "view-item.html",
+            item=item,
+            category=category,
+            owner=owner
+        )
     else:
-        flash('The requested item does not exist.')
+        flash('We are unable to process your request right now.')
         return redirect(url_for('home'))
 
 
@@ -300,17 +315,18 @@ def view_item(item_id):
 def edit_item(item_id):
     """Edit existing item."""
 
-    item = session.query(Item).filter_by(id=item_id).first()
-
     if 'username' not in login_session:
-        flash("You were not authorised to access that page.\
-              Please log in to continue.")
+        flash("Please log in to continue.")
         return redirect(url_for('login'))
 
-    if item is not None:
-        if item.user_id != login_session['user_id']:
-            flash("You were not authorised to access that page.")
-            return redirect(url_for('home'))
+    if not exists_item(item_id):
+        flash("We are unable to process your request right now.")
+        return redirect(url_for('home'))
+
+    item = session.query(Item).filter_by(id=item_id).first()
+    if login_session['user_id'] != item.user_id:
+        flash("You were not authorised to access that page.")
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
         if request.form['name']:
@@ -318,9 +334,11 @@ def edit_item(item_id):
         if request.form['description']:
             item.description = request.form['description']
         if request.form['category']:
-            item.category = request.form['description']
+            item.category_id = request.form['category']
+        session.add(item)
+        session.commit()
         flash('Item successfully updated!')
-        return redirect(url_for('home'))
+        return redirect(url_for('edit_item', item_id=item_id))
     else:
         categories = session.query(Category).\
             filter_by(user_id=login_session['user_id']).all()
@@ -329,6 +347,32 @@ def edit_item(item_id):
             item=item,
             categories=categories
         )
+
+
+@app.route("/catalog/item/<int:item_id>/delete/", methods=['GET', 'POST'])
+def delete_item(item_id):
+    """Delete existing item."""
+
+    if 'username' not in login_session:
+        flash("Please log in to continue.")
+        return redirect(url_for('login'))
+
+    if not exists_item(item_id):
+        flash("We are unable to process your request right now.")
+        return redirect(url_for('home'))
+
+    item = session.query(Item).filter_by(id=item_id).first()
+    if login_session['user_id'] != item.user_id:
+        flash("You were not authorised to access that page.")
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        session.delete(item)
+        session.commit()
+        flash("Item successfully deleted!")
+        return redirect(url_for('home'))
+    else:
+        return render_template('delete.html', item=item) 
 
 
 if __name__ == "__main__":
