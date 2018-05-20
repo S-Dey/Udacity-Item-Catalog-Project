@@ -291,6 +291,23 @@ def exists_item(item_id):
         return False
 
 
+def exists_category(category_id):
+    """Check if the category exists in the database.
+
+    Argument:
+        category_id (int) : The Category ID to find in the database.
+
+    Returns:
+        A boolean vale indicating whether the category exists or not.
+    """
+
+    category = session.query(Category).filter_by(id=category_id).first()
+    if category is not None:
+        return True
+    else:
+        return False
+
+
 @app.route('/catalog/item/<int:item_id>/')
 def view_item(item_id):
     """View an item by its ID."""
@@ -373,6 +390,27 @@ def delete_item(item_id):
         return redirect(url_for('home'))
     else:
         return render_template('delete.html', item=item)
+
+
+@app.route('/catalog/category/<int:category_id>/items/')
+def show_items_in_category(category_id):
+    if 'username' not in login_session:
+        flash("Please log in to continue.")
+        return redirect(url_for('login'))
+
+    if not exists_category(category_id):
+        flash("We are unable to process your request right now.")
+        return redirect(url_for('home'))
+
+    category = session.query(Category).filter_by(id=category_id).first()
+    items = session.query(Item).filter_by(category_id=category.id).all()
+    total = session.query(Item).filter_by(category_id=category.id).count()
+    return render_template(
+        'items.html',
+        category=category,
+        items=items,
+        total=total
+    )
 
 
 # --------------------------------------

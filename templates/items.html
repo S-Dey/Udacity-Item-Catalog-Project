@@ -2,28 +2,12 @@
 {% block title %}View Items{% endblock %}
 
 {% block content %}
-    <div class="container sections">   
-            <div class="row">
-              <div class="col-md-3" style="background-color:white; padding-top: 8px;">
-                <h2>Category</h2><hr>
-                <p><a href="#">Chips</a></p>
-                <a href="#"><p>Computer Parts</p></a>
-              </div>
-              
-              <div class="offset-md-1"></div>
-
-              <div class="col-md-8" style="background-color:white; padding-top: 8px;">
-                <h2>Chips Items</h2>
-                <button type="button" class="btn btn-primary"><i class="fas fa-plus text-and-icon"></i>Add item</button>
-                <hr>
-                <a href="#"><p>Apple iPhone</p></a>
-                <a href="#"><p>Dell Inspiron 5559</p></a>
-                <a href="#"><p>iPhone 2</p></a>
-                <a href="#"><p>MacBook Air</p></a>
-                <a href="#"><p>Python Cookbook</p></a>
-                <a href="#"><p>Adorian's macBook X Pro</p></a>
-              </div>
-            </div>
-          </div>
+    <div class="container sections">
+        <h1>{{ category.name }} ({{ total }}{% if total == 1 %} item{% else %} items{% endif %})</h1>
+        <div class="col-md-8" style="background-color:white; padding-top: 8px;">
+          {% for item in items %}
+            <a href="{{ url_for('view_item', item_id=item.id) }}"><p>{{ item.name }}</p></a>
+          {% endfor %}
+        </div>
     </div>
 {% endblock %}
