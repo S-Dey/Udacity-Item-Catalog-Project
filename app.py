@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# Main module to execute.
+# This modules contains all the routes for the functioning
+# of the application.
+
 from flask import Flask, render_template, request, redirect, jsonify, url_for
 from flask import flash, make_response
 from flask import session as login_session
