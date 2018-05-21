@@ -253,8 +253,7 @@ def add_category():
     """Add a new category."""
 
     if 'username' not in login_session:
-        flash("You were not authorised to access that page.\
-              Please log in to continue.")
+        flash("Please log in to continue.")
         return redirect(url_for('login'))
     elif request.method == 'POST':
         if request.form['new-category-name'] == '':
@@ -290,8 +289,7 @@ def add_item():
     """
 
     if 'username' not in login_session:
-        flash("You were not authorised to access that page.\
-              Please log in to continue.")
+        flash("Please log in to continue.")
         return redirect(url_for('login'))
     elif request.method == 'POST':
         # Check if the item already exists in the database.
