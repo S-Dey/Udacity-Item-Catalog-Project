@@ -294,6 +294,12 @@ def add_item():
               Please log in to continue.")
         return redirect(url_for('login'))
     elif request.method == 'POST':
+        # Check if the item already exists in the database.
+        # If it does, display an error.
+        item = session.query(Item).filter_by(name=request.form['name']).first()
+        if item.name == request.form['name']:
+            flash('The item already exists in the database!')
+            return redirect(url_for("add_item"))
         new_item = Item(
             name=request.form['name'],
             category_id=request.form['category'],
@@ -326,6 +332,12 @@ def add_item_by_category(category_id):
         flash("You were not authorised to access that page.")
         return redirect(url_for('login'))
     elif request.method == 'POST':
+        # Check if the item already exists in the database.
+        # If it does, display an error.
+        item = session.query(Item).filter_by(name=request.form['name']).first()
+        if item.name == request.form['name']:
+            flash('The item already exists in the database!')
+            return redirect(url_for("add_item"))
         new_item = Item(
             name=request.form['name'],
             category_id=category_id,

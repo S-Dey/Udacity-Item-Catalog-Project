@@ -42,6 +42,8 @@
                     <div class="alert alert-danger alert-dismissible fade show mb-0 text-center" role="alert">
                 {% elif message == 'You were not authorised to access that page.' %}
                     <div class="alert alert-danger alert-dismissible fade show mb-0 text-center" role="alert">
+                {% elif message == 'The item already exists in the database!' %}
+                    <div class="alert alert-warning alert-dismissible fade show mb-0 text-center" role="alert">
                 {% else %}
                     <div class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
                 {% endif %}
