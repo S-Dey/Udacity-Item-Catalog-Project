@@ -1,5 +1,5 @@
 # Item Catalog Project
-A Udacity Full Stack Web Developer Nanodegree project.
+An Udacity Full Stack Web Developer II Nanodegree project.
 
 ## About
 This application provides a list of items within a variety of categories as well as provide a user registration and authentication system. Registered users will have the ability to post, edit, and delete their own items.
