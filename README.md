@@ -67,7 +67,7 @@ This application provides a list of items within a variety of categories as well
     ```bash
     python3 database_setup.py
     ```
-13. Run the following command to insert dummy values. **Otherwise, it would show an error.**
+13. Run the following command to insert dummy values. **If you don't run this, the application will not run.**
     ```bash
     python3 fake_db_populator.py
     ```
