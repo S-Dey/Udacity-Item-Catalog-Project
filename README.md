@@ -83,5 +83,12 @@ This application provides a list of items within a variety of categories as well
     ```
 15. Open `http://localhost:5000/` in your favourite Web browser, and enjoy.
 
-## Contact Information
+## Debugging
+In case the app doesn't run, make sure to confirm the following points:
+- You have run `python3 fake_db_populator.py` before running the application. This is an essential step.
+- The latest version of Flask 1.x is installed.
+- The latest version of Python 3.6.x is installed. In the vagrant machine, you may find Python 3.5.x installed by default. To install Python 3.6.x, follow [this answer](https://askubuntu.com/a/865569/571299). To invoke Python 3.6, type `python3.6` instead of `python3`.
+
+
+## Help and Support
 In case you run into any trouble, create an issue on GitHub. I will make sure to look into it as soon as possible.
