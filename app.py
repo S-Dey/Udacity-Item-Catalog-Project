@@ -22,7 +22,7 @@ app = Flask(__name__)
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
-# Connect to database and create a database session.
+# Connect to the database and create a database session.
 engine = create_engine('sqlite:///itemcatalog.db',
                        connect_args={'check_same_thread': False})
 
@@ -38,6 +38,8 @@ session = Session()
 @app.route('/catalog/')
 @app.route('/catalog/items/')
 def home():
+    """Route to the homepage."""
+
     categories = session.query(Category).all()
     items = session.query(Item).all()
     return render_template(
@@ -47,12 +49,15 @@ def home():
 # Create anti-forgery state token
 @app.route('/login/')
 def login():
+    """Route to the login page and create anti-forgery state token."""
+
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in range(32))
     login_session['state'] = state
     return render_template("login.html", STATE=state)
 
 
+# Connect to the Google Sign-in oAuth method.
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -114,7 +119,7 @@ def gconnect():
     login_session['access_token'] = credentials.access_token
     login_session['google_id'] = google_id
 
-    # Get user info
+    # Get user info.
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
@@ -125,12 +130,13 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
-    # see if user exists, if it doesn't make a new one
+    # See if the user exists. If it doesn't, make a new one.
     user_id = get_user_id(data["email"])
     if not user_id:
         user_id = create_user(login_session)
     login_session['user_id'] = user_id
 
+    # Show a welcome screen upon successful login.
     output = ''
     output += '<h2>Welcome, '
     output += login_session['username']
@@ -147,19 +153,20 @@ def gconnect():
 
 # Disconnect Google Account.
 def gdisconnect():
-    """Disconnected the Google account of the current logged-in user."""
+    """Disconnect the Google account of the current logged-in user."""
 
-    # Only disconnect a connected user.
+    # Only disconnect the connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
             json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
+
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print("\n\n", result)
+
     if result['status'] == '200':
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
@@ -199,9 +206,11 @@ def create_user(login_session):
     login_session (dict): The login session.
     """
 
-    new_user = User(name=login_session['username'],
-                    email=login_session['email'],
-                    picture=login_session['picture'])
+    new_user = User(
+        name=login_session['username'],
+        email=login_session['email'],
+        picture=login_session['picture']
+    )
     session.add(new_user)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
@@ -215,7 +224,7 @@ def get_user_info(user_id):
         user_id (int): The user ID.
 
     Returns:
-        The user's details.   
+        The user's details.
     """
 
     user = session.query(User).filter_by(id=user_id).one()
@@ -305,7 +314,7 @@ def add_item():
         )
 
 
-# Create new item by Category ID. 
+# Create new item by Category ID.
 @app.route("/catalog/category/<int:category_id>/item/new/",
            methods=['GET', 'POST'])
 def add_item_by_category(category_id):
@@ -338,7 +347,7 @@ def exists_item(item_id):
         item_id (int) : The item ID to find in the database.
 
     Returns:
-        A boolean vale indicating whether the item exists or not.
+        A boolean value indicating whether the item exists or not.
     """
 
     item = session.query(Item).filter_by(id=item_id).first()
@@ -539,18 +548,20 @@ def delete_category(category_id):
 
 # JSON Endpoints
 
+# Return JSON of all the items in the catalog.
 @app.route('/api/v1/catalog.json')
 def show_catalog_json():
-    """Returns JSON of all the items in the catalog."""
+    """Return JSON of all the items in the catalog."""
 
     items = session.query(Item).order_by(Item.id.desc())
     return jsonify(catalog=[i.serialize for i in items])
 
 
+# Return JSON of a particular item in the catalog.
 @app.route(
     '/api/v1/categories/<int:category_id>/item/<int:item_id>/JSON')
 def catalog_item_json(category_id, item_id):
-    """Returns JSON of certain item in the catalog."""
+    """Return JSON of a particular item in the catalog."""
 
     if exists_item(item_id):
         item = session.query(Item).filter_by(id=item_id).one()
@@ -559,6 +570,7 @@ def catalog_item_json(category_id, item_id):
         return jsonify(error='Item does not exist.')
 
 
+# Return JSON of all the categories in the catalog.
 @app.route('/api/v1/categories/JSON')
 def categories_json():
     """Returns JSON of all the categories in the catalog."""
