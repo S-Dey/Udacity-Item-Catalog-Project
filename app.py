@@ -418,10 +418,6 @@ def delete_item(item_id):
 
 @app.route('/catalog/category/<int:category_id>/items/')
 def show_items_in_category(category_id):
-    if 'username' not in login_session:
-        flash("Please log in to continue.")
-        return redirect(url_for('login'))
-
     if not exists_category(category_id):
         flash("We are unable to process your request right now.")
         return redirect(url_for('home'))
