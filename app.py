@@ -582,7 +582,7 @@ def catalog_item_json(category_id, item_id):
             return jsonify(item=item.serialize)
         else:
             return jsonify(
-                error='The item {} does not belong to the category {}.'
+                error='item {} does not belong to category {}.'
                 .format(item_id, category_id))
     else:
         return jsonify(error='The item or the category does not exist.')
