@@ -1,5 +1,5 @@
 # Item Catalog Project
-An Udacity Full Stack Web Developer II Nanodegree project.
+An Udacity Full Stack Web Developer II Nanodegree project developed by Subhadeep Dey.
 
 ## About
 This application provides a list of items within a variety of categories as well as provide a user registration and authentication system. Registered users will have the ability to post, edit, and delete their own items.
@@ -89,6 +89,8 @@ In case the app doesn't run, make sure to confirm the following points:
 - The latest version of Flask 1.x is installed.
 - The latest version of Python 3.6.x is installed. In the vagrant machine, you may find Python 3.5.x installed by default. To install Python 3.6.x, follow [this answer](https://askubuntu.com/a/865569/571299). To invoke Python 3.6, type `python3.6` instead of `python3`.
 
+## Known Issue
+- This app might show an empty name if you sign in with a non-Gmail-based Google account. For instance, if you use a custom domain based Google account (non gmail.com address), the app might show an empty name. So, make sure to use an email `gmail.com` host only.
 
 ## Help and Support
 In case you run into any trouble, create an issue on GitHub. I will make sure to look into it as soon as possible.
