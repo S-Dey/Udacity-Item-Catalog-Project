@@ -4,7 +4,13 @@ A Udacity Full Stack Web Developer Nanodegree project.
 ## About
 This application provides a list of items within a variety of categories as well as provide a user registration and authentication system. Registered users will have the ability to post, edit, and delete their own items.
 
-## Project Structure
+### Features
+- Proper authentication and authorisation check.
+- Full CRUD support using SQLAlchemy and Flask.
+- JSON endpoints.
+- Implements oAuth using Google Sign-in API.
+
+### Project Structure
 ```
 .
 ├── app.py
