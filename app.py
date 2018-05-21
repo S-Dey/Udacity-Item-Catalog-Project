@@ -33,7 +33,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-# Redirect to login page
+# Redirect to login page.
 @app.route('/')
 @app.route('/catalog/')
 @app.route('/catalog/items/')
@@ -145,8 +145,10 @@ def gconnect():
     return output
 
 
-# Disconnect Google Account
+# Disconnect Google Account.
 def gdisconnect():
+    """Disconnected the Google account of the current logged-in user."""
+
     # Only disconnect a connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
@@ -169,8 +171,11 @@ def gdisconnect():
         return response
 
 
+# Log out the currently connected user.
 @app.route('/logout')
 def logout():
+    """Log out the currently connected user."""
+
     if 'username' in login_session:
         gdisconnect()
         del login_session['google_id']
@@ -186,8 +191,14 @@ def logout():
         return redirect(url_for('home'))
 
 
-# Create new user
+# Create new user.
 def create_user(login_session):
+    """Crate a new user.
+
+    Argument:
+    login_session (dict): The login session.
+    """
+
     new_user = User(name=login_session['username'],
                     email=login_session['email'],
                     picture=login_session['picture'])
@@ -198,11 +209,26 @@ def create_user(login_session):
 
 
 def get_user_info(user_id):
+    """Get user information by ID.
+
+    Argument:
+        user_id (int): The user ID.
+
+    Returns:
+        The user's details.   
+    """
+
     user = session.query(User).filter_by(id=user_id).one()
     return user
 
 
 def get_user_id(email):
+    """Get user ID by email.
+
+    Argument:
+        email (str) : the email of the user.
+    """
+
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
@@ -210,8 +236,11 @@ def get_user_id(email):
         return None
 
 
+# Add a new category.
 @app.route("/catalog/category/new/", methods=['GET', 'POST'])
 def add_category():
+    """Add a new category."""
+
     if 'username' not in login_session:
         flash("You were not authorised to access that page.\
               Please log in to continue.")
@@ -238,13 +267,15 @@ def add_category():
         return render_template('new-category.html')
 
 
+# Create a new item.
 @app.route("/catalog/item/new/", methods=['GET', 'POST'])
 def add_item():
-    """Create new item.
+    """Create a new item.
 
     Note: This route will list all the categories that the
-    logged-in user has created. There is another module which
-    creates items based on the endpoint mentioned.
+    logged-in user has created. There is another module called
+    `add_item_by_category()` which creates items based on the
+    endpoint of the category mentioned.
     """
 
     if 'username' not in login_session:
@@ -274,10 +305,11 @@ def add_item():
         )
 
 
+# Create new item by Category ID. 
 @app.route("/catalog/category/<int:category_id>/item/new/",
            methods=['GET', 'POST'])
 def add_item_by_category(category_id):
-    """Create new item by category ID."""
+    """Create new item by Category ID."""
 
     if 'username' not in login_session:
         flash("You were not authorised to access that page.")
@@ -298,6 +330,7 @@ def add_item_by_category(category_id):
         return render_template('new-item-2.html', category=category)
 
 
+# Check if the item exists in the database,
 def exists_item(item_id):
     """Check if the item exists in the database.
 
@@ -315,6 +348,7 @@ def exists_item(item_id):
         return False
 
 
+# Check if the category exists in the database.
 def exists_category(category_id):
     """Check if the category exists in the database.
 
@@ -332,6 +366,7 @@ def exists_category(category_id):
         return False
 
 
+# View an item by its ID.
 @app.route('/catalog/item/<int:item_id>/')
 def view_item(item_id):
     """View an item by its ID."""
@@ -352,6 +387,7 @@ def view_item(item_id):
         return redirect(url_for('home'))
 
 
+# Edit existing item.
 @app.route("/catalog/item/<int:item_id>/edit/", methods=['GET', 'POST'])
 def edit_item(item_id):
     """Edit existing item."""
@@ -390,6 +426,7 @@ def edit_item(item_id):
         )
 
 
+# Delete existing item.
 @app.route("/catalog/item/<int:item_id>/delete/", methods=['GET', 'POST'])
 def delete_item(item_id):
     """Delete existing item."""
@@ -416,8 +453,11 @@ def delete_item(item_id):
         return render_template('delete.html', item=item)
 
 
+# Show items in a particular category.
 @app.route('/catalog/category/<int:category_id>/items/')
 def show_items_in_category(category_id):
+    """# Show items in a particular category."""
+
     if not exists_category(category_id):
         flash("We are unable to process your request right now.")
         return redirect(url_for('home'))
@@ -429,13 +469,15 @@ def show_items_in_category(category_id):
         'items.html',
         category=category,
         items=items,
-        total=total
-    )
+        total=total)
 
 
+# Edit a category.
 @app.route('/catalog/category/<int:category_id>/edit/',
            methods=['GET', 'POST'])
 def edit_category(category_id):
+    """Edit a category."""
+
     category = session.query(Category).filter_by(id=category_id).first()
 
     if 'username' not in login_session:
@@ -464,9 +506,12 @@ def edit_category(category_id):
         return render_template('edit_category.html', category=category)
 
 
+# Delete a category.
 @app.route('/catalog/category/<int:category_id>/delete/',
            methods=['GET', 'POST'])
 def delete_category(category_id):
+    """Delete a category."""
+
     category = session.query(Category).filter_by(id=category_id).first()
 
     if 'username' not in login_session:
@@ -492,9 +537,8 @@ def delete_category(category_id):
         return render_template("delete_category.html", category=category)
 
 
-# --------------------------------------
-# JSON APIs to show Catalog information
-# --------------------------------------
+# JSON Endpoints
+
 @app.route('/api/v1/catalog.json')
 def show_catalog_json():
     """Returns JSON of all the items in the catalog."""
