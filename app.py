@@ -575,11 +575,17 @@ def show_catalog_json():
 def catalog_item_json(category_id, item_id):
     """Return JSON of a particular item in the catalog."""
 
-    if exists_item(item_id):
-        item = session.query(Item).filter_by(id=item_id).one()
-        return jsonify(item=item.serialize)
+    if exists_category(category_id) and exists_item(item_id):
+        item = session.query(Item)\
+               .filter_by(id=item_id, category_id=category_id).first()
+        if item is not None:
+            return jsonify(item=item.serialize)
+        else:
+            return jsonify(
+                error='The item {} does not belong to the category {}.'
+                .format(item_id, category_id))
     else:
-        return jsonify(error='Item does not exist.')
+        return jsonify(error='The item or the category does not exist.')
 
 
 # Return JSON of all the categories in the catalog.
