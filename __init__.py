@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # This modules contains all the routes for the functioning
 # of the application.
 
@@ -25,7 +25,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 # Connect to the database and create a database session.
-engine = create_engine('sqlite:///itemcatalog.db',
+engine = create_engine('postgresql://catalog:password@localhost/catalog',
                        connect_args={'check_same_thread': False})
 
 # Bind the above engine to a session.
