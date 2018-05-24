@@ -21,8 +21,9 @@ import requests
 app = Flask(__name__)
 
 # Load the Google Sign-in API Client ID.
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open(APP_ROOT + '/client_secrets.json', 'r').read())['web']['client_id']
 
 # Connect to the database and create a database session.
 engine = create_engine('postgresql://catalog:password@localhost/catalog')
