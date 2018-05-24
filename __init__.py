@@ -25,8 +25,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 # Connect to the database and create a database session.
-engine = create_engine('postgresql://catalog:password@localhost/catalog',
-                       connect_args={'check_same_thread': False})
+engine = create_engine('postgresql://catalog:password@localhost/catalog')
 
 # Bind the above engine to a session.
 Session = sessionmaker(bind=engine)
