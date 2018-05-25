@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/var/www/FlaskApp/venv/bin/python3
 # Module to set up database.
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
