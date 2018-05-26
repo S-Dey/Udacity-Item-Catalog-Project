@@ -14,11 +14,11 @@ session = Session()
 
 # Delete all the rows
 
-num_deleted_user = session.query(User).delete()
-session.commit()
-
 num_deleted_items = session.query(Item).delete()
 session.commit()
 
 num_deleted_categories = session.query(Category).delete()
+session.commit()
+
+num_deleted_user = session.query(User).delete()
 session.commit()
