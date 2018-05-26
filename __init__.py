@@ -12,7 +12,6 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from pprint import pprint
 import httplib2
-import urllib.request
 import random
 import string
 import json
@@ -25,28 +24,8 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 # Load the Google Sign-in API Client ID.
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-#print(APP_ROOT)
 CLIENT_ID = json.loads(
     open(APP_ROOT + '/client_secrets.json', 'r').read())['web']['client_id']
-
-##################
-#CLIENT_ID = json.loads(
-#    open('/var/www/FlaskApp/FlaskApp/client_secrets.json', 'r').read())['web']['client_id']
-##############
-
-#THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-#my_file = os.path.join(THIS_FOLDER, 'client_secrets.json')
-
-#CLIENT_ID = json.loads(open(my_file, 'r').read())['web']['client_id']
-########
-
-#file_path = '/var/www/FlaskApp/FlaskApp/'
-#file_name = 'client_secrets.json'
-#abs_file = os.path.join(file_path, file_name)
-#CLIENT_ID = json.loads(open(abs_file, 'r').read())['web']['client_id']
-
-#with app.open_resource('client_secrets.json') as f:
-#    CLIENT_ID = json.load(f)['web']['client_id']
 
 # Connect to the database and create a database session.
 engine = create_engine('postgresql://catalog:password@localhost/catalog')
@@ -95,7 +74,8 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets(APP_ROOT + '/client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(
+            APP_ROOT + '/client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
