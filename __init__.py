@@ -24,10 +24,10 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 # Load the Google Sign-in API Client ID.
-#APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 #print(APP_ROOT)
-#CLIENT_ID = json.loads(
-#    open(APP_ROOT + '/client_secrets.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(
+    open(APP_ROOT + '/client_secrets.json', 'r').read())['web']['client_id']
 
 ##################
 #CLIENT_ID = json.loads(
@@ -47,12 +47,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 #with app.open_resource('client_secrets.json') as f:
 #    CLIENT_ID = json.load(f)['web']['client_id']
-
-
-with urllib.request.urlopen("https://www.subhadeepdey.com/api/client_secrets.json") as url:
-    data = json.loads(url.read().decode())
-    CLIENT_ID = data['web']['client_id']
-
 
 # Connect to the database and create a database session.
 engine = create_engine('postgresql://catalog:password@localhost/catalog')
@@ -101,7 +95,7 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(APP_ROOT + '/client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
