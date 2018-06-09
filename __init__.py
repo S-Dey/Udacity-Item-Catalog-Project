@@ -551,10 +551,17 @@ def delete_category(category_id):
         return redirect(url_for('home'))
 
     if request.method == 'POST':
-        session.delete(category)
-        session.commit()
-        flash("Category successfully deleted!")
-        return redirect(url_for('home'))
+        category = session.query(Category).filter_by(id=category_id).first()
+        total = session.query(Item).filter_by(category_id=category.id).count()
+        # Delete only if the category has no items.
+        if total == 0:
+            session.delete(category)
+            session.commit()
+            flash("Category successfully deleted!")
+            return redirect(url_for('home'))
+        else:
+            flash("We are unable to process your request right now.")
+            return redirect(url_for('home'))
     else:
         return render_template("delete_category.html", category=category)
 
