@@ -351,7 +351,11 @@ def add_item_by_category(category_id):
                                 category_id=category_id))
     else:
         category = session.query(Category).filter_by(id=category_id).first()
-        return render_template('new-item-2.html', category=category)
+        if login_session['user_id'] != category.user_id:
+            flash("You were not authorised to access that page.")
+            return redirect(url_for('home'))
+        else:
+            return render_template('new-item-2.html', category=category)
 
 
 # Check if the item exists in the database,
