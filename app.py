@@ -128,7 +128,12 @@ def gconnect():
 
     data = answer.json()
 
-    login_session['username'] = data['name']
+    # Assing Email as name if User does not have Google+
+    if "name" in data:
+        login_session['username'] = data['name']
+    else:
+        name_corp = data['email'][:data['email'].find("@")]
+        login_session['username'] = name_corp
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
