@@ -55,7 +55,7 @@ This application provides a list of items within a variety of categories as well
 
    This will cause Vagrant to download the Ubuntu operating system and install it. This may take quite a while depending on how fast your Internet connection is.
 
-6. After the above command succeeds, connect to the newly created VM by typing the following command:
+6. After the above command succeeds, connect to the newly created VM:
 
    ```bash
    vagrant ssh
@@ -69,11 +69,11 @@ This application provides a list of items within a variety of categories as well
     ```bash
     sudo python3 -m pip install --upgrade flask
     ```
-12. Run the following command to set up the database:
+12. Set up the database:
     ```bash
     python3 database_setup.py
     ```
-13. Run the following command to insert dummy values. **If you don't run this, the application will not run.**
+13. Insert dummy values. **If you don't run this, the application might not run.**
     ```bash
     python3 fake_db_populator.py
     ```
@@ -86,11 +86,11 @@ This application provides a list of items within a variety of categories as well
 ## Debugging
 In case the app doesn't run, make sure to confirm the following points:
 - You have run `python3 fake_db_populator.py` before running the application. This is an essential step.
-- The latest version of Flask 1.x is installed.
-- The latest version of Python 3.6.x is installed. In the vagrant machine, you may find Python 3.5.x installed by default. To install Python 3.6.x, follow [this answer](https://askubuntu.com/a/865569/571299). To invoke Python 3.6, type `python3.6` instead of `python3`.
+- The latest version of Flask is installed.
+- Python 3.6 is installed. In the vagrant machine, you may find Python 3.5 installed by default. To install Python 3.6, follow [this answer](https://askubuntu.com/a/865569/571299). To invoke Python 3.6, type `python3.6` instead of `python3`.
 
 ## Known Issue
-This app might show an empty username if you sign in with a custom-domain-based Google account. For instance, if you use a Google account `johndoe@company.com`, this app might show an empty username. So, make sure to use an email with `gmail.com` domain only for best experience.
+This app might show an empty username if you sign in with a custom-domain-based Google account (Corporate accounts). For instance, if you use a Google account `johndoe@company.com`, this app might show an empty username.
 
 ## Help and Support
 In case you run into any trouble, create an issue on GitHub. I will make sure to look into it as soon as possible.
