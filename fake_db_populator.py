@@ -14,7 +14,7 @@ session = Session()
 
 user1 = User(
     name='Subhadeep',
-    email='contact.sdey@gmail.com',
+    email='myemail@gmail.com',
     picture='https://img.com/sdf'
 )
 
